@@ -510,9 +510,14 @@ function validateStep(){
   if(step==='personal'){
     const nombre = document.getElementById('f_nombre').value.trim();
     const email = document.getElementById('f_email').value.trim();
+    const puesto = document.getElementById('f_puesto').value.trim();
+    const ciudad = document.getElementById('f_ciudad').value.trim();
     const resumen = document.getElementById('f_resumen').value.trim();
+    
     if(!nombre){ flagInvalid('f_nombre','Cuéntanos tu nombre para continuar.'); return false; }
+    if(!puesto){ flagInvalid('f_puesto','El puesto es obligatorio.'); return false; }
     if(!email){ flagInvalid('f_email','Necesitamos un correo de contacto.'); return false; }
+    if(!ciudad){ flagInvalid('f_ciudad','La ciudad es obligatoria.'); return false; }
     
     const wordCount = resumen.split(/\s+/).filter(w => w.length > 0).length;
     if(wordCount < 20){ flagInvalid('f_resumen','La descripción de tu perfil profesional debe tener al menos 20 palabras.'); return false; }
@@ -522,13 +527,32 @@ function validateStep(){
     if(state.hasExperience===null){ alert('Elige una opción para continuar.'); return false; }
     return true;
   }
+  if(step==='skills'){
+    if(state.skills.length < 3){
+      flagInvalid('skillInput', 'Añade al menos 3 habilidades.');
+      return false;
+    }
+    if(state.languages.length === 0){
+      alert('Por favor, añade al menos un idioma (como tu idioma nativo).');
+      return false;
+    }
+    for(let i = 0; i < state.languages.length; i++){
+      const l = state.languages[i];
+      if(!l.idioma.trim()){ flagInvalid(`f_idioma_${i}`, 'Ingresa el idioma'); return false; }
+      if(!l.nivel.trim()){ flagInvalid(`f_nivel_${i}`, 'Selecciona un nivel'); return false; }
+    }
+    return true;
+  }
   return true;
 }
 function flagInvalid(id,msg){
   const el = document.getElementById(id);
+  if(!el) return;
   el.style.borderColor = 'var(--danger)';
   el.focus();
-  el.addEventListener('input', ()=>{ el.style.borderColor=''; }, {once:true});
+  const clear = () => { el.style.borderColor=''; el.removeEventListener('input', clear); el.removeEventListener('change', clear); };
+  el.addEventListener('input', clear);
+  el.addEventListener('change', clear);
 }
 
 /* ============ STEP RENDERERS ============ */
@@ -544,13 +568,13 @@ personal(){
       <p>Esta información aparece en la cabecera de tu currículum.</p>
     </div>
     <div class="field"><label>Nombre completo</label><input type="text" id="f_nombre" placeholder="Ej. Ana García López" value="${esc(p.nombre)}"></div>
-    <div class="field"><label>Puesto al que aspiras <span class="hint">(opcional)</span></label><input type="text" id="f_puesto" placeholder="Ej. Diseñadora UX / Contable Junior" value="${esc(p.puesto)}"></div>
+    <div class="field"><label>Puesto al que aspiras</label><input type="text" id="f_puesto" placeholder="Ej. Diseñadora UX / Contable Junior" value="${esc(p.puesto)}"></div>
     <div class="grid-2">
       <div class="field"><label>Correo electrónico</label><input type="email" id="f_email" placeholder="tu@correo.com" value="${esc(p.email)}"></div>
       <div class="field"><label>Teléfono <span class="hint">(opcional)</span></label><input type="tel" id="f_telefono" placeholder="+34 600 000 000" value="${esc(p.telefono)}"></div>
     </div>
     <div class="grid-2">
-      <div class="field"><label>Ciudad <span class="hint">(opcional)</span></label><input type="text" id="f_ciudad" placeholder="Ciudad, País" value="${esc(p.ciudad)}"></div>
+      <div class="field"><label>Ciudad</label><input type="text" id="f_ciudad" placeholder="Ciudad, País" value="${esc(p.ciudad)}"></div>
       <div class="field"><label>LinkedIn o portafolio <span class="hint">(opcional)</span></label><input type="text" id="f_linkedin" placeholder="linkedin.com/in/tu-nombre" value="${esc(p.linkedin)}"></div>
     </div>
     <div class="field"><label>Descripción de tu perfil profesional <span class="hint">(mínimo 20 palabras)</span></label><textarea id="f_resumen" placeholder="Describe brevemente tu experiencia, habilidades y objetivos profesionales...">${esc(p.resumen)}</textarea></div>
@@ -644,9 +668,9 @@ skills(){
         </button>
       </div>
       <div class="grid-2">
-        <div class="field"><label>Idioma</label><input type="text" data-lang="${i}" data-field="idioma" value="${esc(l.idioma)}" placeholder="Ej. Inglés"></div>
+        <div class="field"><label>Idioma</label><input type="text" id="f_idioma_${i}" data-lang="${i}" data-field="idioma" value="${esc(l.idioma)}" placeholder="Ej. Inglés"></div>
         <div class="field"><label>Nivel</label>
-          <select data-lang="${i}" data-field="nivel">
+          <select id="f_nivel_${i}" data-lang="${i}" data-field="nivel">
             <option value="">Elige...</option>
             <option value="Básico" ${l.nivel==='Básico'?'selected':''}>Básico</option>
             <option value="Intermedio" ${l.nivel==='Intermedio'?'selected':''}>Intermedio</option>
@@ -664,7 +688,7 @@ skills(){
       <p>Añade palabras clave relevantes para el puesto que buscas.</p>
     </div>
     <div class="field">
-      <label>Habilidades</label>
+      <label>Habilidades <span class="hint">(mínimo 3)</span></label>
       <div class="skills-input-row">
         <input type="text" id="skillInput" placeholder="Ej. Excel, atención al cliente...">
         <button class="btn btn-ghost btn-sm" id="addSkillBtn" type="button">Añadir</button>
@@ -672,7 +696,7 @@ skills(){
       <div class="chip-wrap" id="chipWrap">${chips}</div>
     </div>
     <div class="field" style="margin-top:22px;">
-      <label>Idiomas <span class="hint">(opcional)</span></label>
+      <label>Idiomas <span class="hint">(añade por lo menos el nativo)</span></label>
       <div id="langListWrap">${langs}</div>
       <button class="add-link" id="addLangBtn" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Añadir idioma</button>
     </div>
