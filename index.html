@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Hoja en Blanco — Crea tu currículum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --paper:#FAF9F5;
+  --paper-2:#F1EFE9;
+  --ink:#1C2321;
+  --ink-soft:#4A5450;
+  --line:#DEDAD0;
+  --pine:#3F6C51;
+  --pine-dark:#2C4E39;
+  --clay:#B08968;
+  --clay-soft:#EFE3D6;
+  --white:#FFFFFF;
+  --danger:#B5493C;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(28,35,33,.06), 0 8px 24px rgba(28,35,33,.08);
+  --shadow-lg:0 20px 60px rgba(28,35,33,.18);
+  --resume-accent:#2C4E39;
+  --step-total:8;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+h1,h2,h3,.display{font-family:'Fraunces',Georgia,serif;}
+button{font-family:inherit;}
+input,select,textarea{font-family:'Inter',system-ui,sans-serif;}
+
+/* ============ APP CHROME ============ */
+.app{max-width:1080px; margin:0 auto; padding:0 20px 140px;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 20px; max-width:1080px; margin:0 auto;
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-family:'Fraunces',serif; font-weight:600; font-size:19px; letter-spacing:-.01em;
+}
+.brand-mark{
+  width:26px;height:26px;border-radius:6px;
+  background:linear-gradient(155deg,var(--pine),var(--pine-dark));
+  display:flex;align-items:center;justify-content:center;
+  color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:500;
+  flex-shrink:0;
+}
+.progress-wrap{display:none;}
+.progress-wrap.show{display:flex; align-items:center; gap:10px;}
+.progress-track{
+  width:110px; height:4px; background:var(--line); border-radius:99px; overflow:hidden;
+}
+.progress-fill{height:100%; background:var(--pine); border-radius:99px; transition:width .35s ease;}
+.progress-label{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); white-space:nowrap;
+}
+
+/* ============ HERO ============ */
+.hero{
+  padding:44px 0 8px;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--pine-dark); margin:0 0 14px; display:flex; align-items:center; gap:8px;
+}
+.eyebrow::before{content:''; width:16px; height:1px; background:var(--pine);}
+.hero h1{
+  font-size:clamp(32px,7vw,54px); line-height:1.05; letter-spacing:-.02em; margin:0 0 18px; font-weight:600;
+  max-width:14ch;
+}
+.hero h1 em{font-style:italic; color:var(--pine-dark); font-weight:500;}
+.hero p{
+  font-size:17px; line-height:1.55; color:var(--ink-soft); max-width:46ch; margin:0 0 30px;
+}
+.cta-row{display:flex; gap:12px; flex-wrap:wrap; align-items:center;}
+.btn{
+  appearance:none; border:none; cursor:pointer; border-radius:10px;
+  font-weight:600; font-size:15px; padding:14px 24px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  min-height:50px;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--ink); color:var(--paper);}
+.btn-primary:hover{background:var(--pine-dark);}
+.btn-ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--ink);}
+.btn-sm{padding:9px 16px; font-size:13px; min-height:38px; border-radius:8px;}
+.btn:disabled{opacity:.4; cursor:not-allowed; transform:none;}
+.hero-note{font-size:13px; color:var(--ink-soft); margin-top:14px; display:flex; gap:6px; align-items:center;}
+
+.trust-row{
+  display:flex; gap:28px; flex-wrap:wrap; margin-top:46px; padding-top:26px; border-top:1px solid var(--line);
+}
+.trust-item{font-size:13px; color:var(--ink-soft); display:flex; align-items:center; gap:8px;}
+.trust-item svg{flex-shrink:0; color:var(--pine);}
+
+/* ============ WIZARD ============ */
+.wizard{display:none;}
+.wizard.show{display:block;}
+.step-card{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px 22px;
+  margin-top:18px;
+  box-shadow:var(--shadow);
+}
+.step-head{margin-bottom:22px;}
+.step-kicker{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--pine-dark);
+  letter-spacing:.06em; text-transform:uppercase; margin:0 0 8px;
+}
+.step-head h2{font-size:24px; margin:0 0 6px; font-weight:600; letter-spacing:-.01em;}
+.step-head p{font-size:14px; color:var(--ink-soft); margin:0; line-height:1.5;}
+
+.field{margin-bottom:16px;}
+.field label{
+  display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--ink);
+}
+.field .hint{font-weight:400; color:var(--ink-soft); font-size:12px;}
+.field input[type=text],
+.field input[type=email],
+.field input[type=tel],
+.field input[type=month],
+.field input[type=url],
+.field textarea,
+.field select{
+  width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:9px;
+  font-size:15px; color:var(--ink); background:var(--paper); transition:border-color .15s;
+}
+.field input:focus, .field textarea:focus, .field select:focus{
+  outline:none; border-color:var(--pine); background:var(--white);
+}
+.field textarea{resize:vertical; min-height:88px; line-height:1.5;}
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media(max-width:520px){.grid-2{grid-template-columns:1fr;}}
+
+.choice-row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;}
+.choice-card{
+  border:1.5px solid var(--line); border-radius:12px; padding:20px 16px; cursor:pointer;
+  text-align:left; background:var(--paper); transition:border-color .15s, background .15s;
+}
+.choice-card svg{color:var(--pine-dark); margin-bottom:10px;}
+.choice-card strong{display:block; font-size:15px; margin-bottom:4px;}
+.choice-card span{font-size:12.5px; color:var(--ink-soft); line-height:1.4; display:block;}
+.choice-card.active{border-color:var(--pine); background:var(--clay-soft); box-shadow:0 0 0 3px rgba(63,108,81,.12);}
+
+.entry-card{
+  border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; position:relative; background:var(--paper);
+}
+.entry-card .entry-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.entry-title{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+.icon-btn{
+  background:none; border:none; cursor:pointer; color:var(--ink-soft); padding:6px; border-radius:6px; display:flex;
+}
+.icon-btn:hover{background:var(--line); color:var(--danger);}
+.checkbox-row{display:flex; align-items:center; gap:8px; margin:-4px 0 14px;}
+.checkbox-row input{width:16px; height:16px; accent-color:var(--pine);}
+.checkbox-row label{font-size:13px; color:var(--ink-soft); margin:0;}
+
+.add-link{
+  background:none; border:1.5px dashed var(--line); color:var(--pine-dark); cursor:pointer;
+  width:100%; padding:13px; border-radius:10px; font-weight:600; font-size:14px;
+  display:flex; align-items:center; justify-content:center; gap:8px; transition:border-color .15s, background .15s;
+}
+.add-link:hover{border-color:var(--pine); background:var(--clay-soft);}
+
+.skills-input-row{display:flex; gap:8px; margin-bottom:12px;}
+.skills-input-row input{flex:1;}
+.chip-wrap{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:99px; padding:7px 8px 7px 14px;
+  font-size:13px; display:flex; align-items:center; gap:6px; color:var(--ink);
+}
+.chip button{background:none; border:none; cursor:pointer; color:var(--ink-soft); display:flex; padding:2px;}
+.chip button:hover{color:var(--danger);}
+
+.photo-toggle{display:flex; gap:12px; margin-bottom:18px;}
+.toggle-pill{
+  flex:1; border:1.5px solid var(--line); border-radius:10px; padding:14px; text-align:center;
+  cursor:pointer; font-weight:600; font-size:14px; background:var(--paper); transition:.15s;
+}
+.toggle-pill.active{border-color:var(--pine); background:var(--clay-soft); color:var(--pine-dark);}
+.photo-upload{
+  border:1.5px dashed var(--line); border-radius:12px; padding:24px; text-align:center; cursor:pointer;
+  transition:border-color .15s;
+}
+.photo-upload:hover{border-color:var(--pine);}
+.photo-upload input{display:none;}
+.photo-preview{width:88px; height:88px; border-radius:50%; object-fit:cover; margin:0 auto 12px; display:block; border:2px solid var(--line);}
+.photo-upload-label{font-size:13.5px; color:var(--ink-soft);}
+.photo-upload-label strong{color:var(--pine-dark);}
+
+/* nav footer */
+.step-nav{
+  position:fixed; bottom:0; left:0; right:0; background:rgba(250,249,245,.92); backdrop-filter:blur(10px);
+  border-top:1px solid var(--line); padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+  display:flex; gap:10px; justify-content:space-between; z-index:40;
+}
+.step-nav.hidden{display:none;}
+.step-nav-inner{max-width:1080px; margin:0 auto; display:flex; gap:10px; width:100%;}
+.step-nav .btn{flex:1;}
+.step-nav .btn-ghost{flex:0 0 auto; min-width:90px;}
+
+/* ============ TEMPLATE SELECT ============ */
+.template-select-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media(max-width:640px){.template-select-grid{grid-template-columns:1fr;}}
+.template-option{
+  border:2px solid var(--line); border-radius:14px; padding:14px; cursor:pointer; position:relative;
+  background:var(--paper); transition:border-color .15s, box-shadow .15s;
+}
+.template-option.active{border-color:var(--pine); box-shadow:0 0 0 4px rgba(63,108,81,.1);}
+.recommend-badge{
+  position:absolute; top:-11px; left:14px; background:var(--pine); color:var(--white);
+  font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px; letter-spacing:.02em;
+  display:flex; align-items:center; gap:5px;
+}
+.thumb-frame{
+  width:100%; aspect-ratio:210/297; overflow:hidden; border-radius:8px; border:1px solid var(--line);
+  background:var(--white); margin-bottom:12px; position:relative;
+}
+.thumb-frame .resume-page{
+  width:794px; transform-origin:top left;
+  position:absolute; top:0; left:0;
+}
+.template-option h3{font-size:16px; margin:0 0 4px; font-weight:600;}
+.template-option p{font-size:12.5px; color:var(--ink-soft); margin:0; line-height:1.45;}
+
+/* color swatches */
+.swatch-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:18px;}
+.swatch{
+  width:38px; height:38px; border-radius:50%; cursor:pointer; border:2px solid transparent; position:relative;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.swatch.active::after{
+  content:''; position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--ink);
+}
+.swatch-custom{
+  width:38px; height:38px; border-radius:50%; overflow:hidden; position:relative; cursor:pointer;
+  border:1px solid var(--line); background:conic-gradient(from 0deg,red,orange,yellow,green,blue,violet,red);
+}
+.swatch-custom input{position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;}
+
+/* ============ PREVIEW / RESUME ============ */
+.preview-shell{
+  background:var(--paper-2); border-radius:16px; padding:24px 16px; margin-top:18px; overflow-x:auto;
+}
+.preview-scale-wrap{
+  width:794px; margin:0 auto;
+}
+@media(max-width:860px){
+  .preview-scale-wrap{width:100%; display:flex; justify-content:center;}
+}
+
+.resume-page{
+  width:794px; min-height:1122px; background:var(--white); color:#232323;
+  font-family:'Inter',sans-serif; box-shadow:var(--shadow-lg); position:relative;
+}
+@media(max-width:860px){
+  .resume-page.responsive-scale{
+    transform:scale(0.44); transform-origin:top center; margin-bottom:-600px;
+  }
+}
+@media(min-width:461px) and (max-width:860px){
+  .resume-page.responsive-scale{transform:scale(0.56); margin-bottom:-490px;}
+}
+
+/* --- Template A: Ejecutivo (ESPACIADO Y TAMAÑO MEJORADO) --- */
+.tpl-ejecutivo{padding:100px 104px 90px;}
+.tpl-ejecutivo .head{display:flex; align-items:center; gap:40px; border-bottom:4px solid var(--resume-accent); padding-bottom:44px; margin-bottom:54px;}
+.tpl-ejecutivo .head img{width:160px; height:160px; border-radius:50%; object-fit:cover; flex-shrink:0;}
+.tpl-ejecutivo .head-text h1{font-family:'Fraunces',serif; font-size:62px; margin:0 0 14px; color:#1C2321; font-weight:600; letter-spacing:-.01em;}
+.tpl-ejecutivo .head-text .role{font-size:25px; color:var(--resume-accent); font-weight:600; letter-spacing:.02em; margin-bottom:24px;}
+.tpl-ejecutivo .contact-line{display:flex; flex-wrap:wrap; gap:14px 32px; font-size:20px; color:#555;}
+.tpl-ejecutivo .contact-line span{display:flex; align-items:center; gap:6px;}
+.tpl-ejecutivo section{margin-bottom:54px;}
+.tpl-ejecutivo h2.sec{
+  font-family:'IBM Plex Mono',monospace; font-size:21px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--resume-accent); margin:0 0 32px; padding-bottom:14px; border-bottom:2px solid #E5E2DA;
+}
+.tpl-ejecutivo .summary{font-size:22px; line-height:1.8; color:#3A3A3A;}
+.tpl-ejecutivo .item{margin-bottom:44px; padding-left:28px; border-left:3px solid #E5E2DA; position:relative;}
+.tpl-ejecutivo .item::before{content:''; position:absolute; left:-9px; top:8px; width:15px; height:15px; border-radius:50%; background:var(--resume-accent);}
+.tpl-ejecutivo .item-top{display:flex; justify-content:space-between; gap:16px; margin-bottom:8px; flex-wrap:wrap;}
+.tpl-ejecutivo .item-top strong{font-size:25px; color:#1C2321;}
+.tpl-ejecutivo .item-top .date{font-size:20px; color:#8A8A8A; font-family:'IBM Plex Mono',monospace; white-space:nowrap;}
+.tpl-ejecutivo .item-sub{font-size:23px; color:var(--resume-accent); font-weight:600; margin-bottom:14px;}
+.tpl-ejecutivo .item-desc{font-size:21px; line-height:1.75; color:#4A4A4A;}
+.tpl-ejecutivo .skills-flex{display:flex; flex-wrap:wrap; gap:16px;}
+.tpl-ejecutivo .skill-pill{
+  background:#F4F2EC; color:#333; font-size:20px; padding:12px 24px; border-radius:99px; border:1px solid #E5E2DA;
+}
+.tpl-ejecutivo .lang-row{display:flex; justify-content:space-between; font-size:21px; margin-bottom:18px; color:#3A3A3A;}
+.tpl-ejecutivo .lang-row b{color:var(--resume-accent);}
+
+/* --- Template B: Moderno (ESPACIADO Y TAMAÑO MEJORADO) --- */
+.tpl-moderno{display:flex; min-height:1122px;}
+.tpl-moderno .side{
+  width:360px; background:var(--resume-accent); color:#fff; padding:90px 48px; flex-shrink:0;
+}
+.tpl-moderno .side img{width:180px; height:180px; border-radius:50%; object-fit:cover; margin:0 auto 40px; display:block; border:5px solid rgba(255,255,255,.35);}
+.tpl-moderno .side h1{font-family:'Fraunces',serif; font-size:44px; text-align:center; margin:0 0 14px; font-weight:600; line-height:1.2;}
+.tpl-moderno .side .role{text-align:center; font-size:22px; opacity:.85; margin-bottom:54px; letter-spacing:.02em;}
+.tpl-moderno .side h3.sec{
+  font-family:'IBM Plex Mono',monospace; font-size:19px; letter-spacing:.1em; text-transform:uppercase;
+  opacity:.75; margin:54px 0 24px; padding-top:30px; border-top:1px solid rgba(255,255,255,.2);
+}
+.tpl-moderno .side h3.sec:first-of-type{border-top:none; padding-top:0; margin-top:0;}
+.tpl-moderno .side .contact-item{font-size:19px; display:flex; align-items:flex-start; gap:14px; margin-bottom:24px; line-height:1.5; word-break:break-word;}
+.tpl-moderno .side .skill-tag{
+  background:rgba(255,255,255,.14); font-size:19px; padding:10px 18px; border-radius:8px; margin-bottom:12px; display:inline-block; margin-right:10px;
+}
+.tpl-moderno .side .lang-item{font-size:19px; margin-bottom:20px; display:flex; justify-content:space-between; opacity:.92;}
+.tpl-moderno .main{padding:90px 70px; flex:1; min-width:0;}
+.tpl-moderno .main .summary{font-size:22px; line-height:1.8; color:#3A3A3A; margin-bottom:54px;}
+.tpl-moderno .main h2.sec{
+  font-family:'Fraunces',serif; font-size:30px; font-weight:600; color:#1C2321; margin:0 0 34px;
+  display:flex; align-items:center; gap:18px;
+}
+.tpl-moderno .main h2.sec::after{content:''; flex:1; height:2px; background:#E5E2DA;}
+.tpl-moderno .main section{margin-bottom:54px;}
+.tpl-moderno .item{margin-bottom:44px;}
+.tpl-moderno .item-top{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:8px;}
+.tpl-moderno .item-top strong{font-size:25px; color:#1C2321;}
+.tpl-moderno .item-top .date{font-size:20px; color:#8A8A8A; font-family:'IBM Plex Mono',monospace; white-space:nowrap;}
+.tpl-moderno .item-sub{font-size:23px; color:var(--resume-accent); font-weight:600; margin-bottom:14px;}
+.tpl-moderno .item-desc{font-size:21px; line-height:1.75; color:#4A4A4A;}
+
+.empty-msg{font-size:20px; color:#999; font-style:italic;}
+
+/* ============ RESULT ACTIONS ============ */
+.result-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:20px; justify-content:center;}
+.customize-panel{background:var(--white); border:1px solid var(--line); border-radius:14px; padding:20px; margin-top:16px;}
+.customize-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+.customize-row:last-child{margin-bottom:0;}
+.customize-label{font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px;}
+.mini-toggle{display:flex; border:1.5px solid var(--line); border-radius:9px; overflow:hidden;}
+.mini-toggle button{border:none; background:var(--paper); padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-soft);}
+.mini-toggle button.active{background:var(--pine); color:#fff;}
+
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{position:absolute; top:0; left:0; margin:0; box-shadow:none;}
+  .resume-page{box-shadow:none; transform:none !important; margin:0 !important; width:210mm; min-height:297mm;}
+  @page{size:A4; margin:0;}
+}
+
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="brand-mark">H</span>Hoja en Blanco</div>
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">Paso 1 de 8</div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- HERO -->
+  <section class="hero" id="heroSection">
+    <p class="eyebrow">Currículums en minutos</p>
+    <h1>Tu experiencia, contada con <em>claridad</em>.</h1>
+    <p>Responde un formulario breve y te preparamos dos currículums profesionales listos para descargar. Elige el que mejor te represente, ajusta el color y decide si incluir foto.</p>
+    <div class="cta-row">
+      <button class="btn btn-primary" id="startBtn">
+        Crear mi currículum
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <p class="hero-note">Sin registro. Tus datos se quedan en este dispositivo.</p>
+    <div class="trust-row">
+      <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Dos plantillas ATS-friendly</div>
+      <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.6"/></svg>Se adapta a tu experiencia</div>
+      <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Listo para imprimir o descargar en PDF</div>
+    </div>
+  </section>
+
+  <!-- WIZARD -->
+  <section class="wizard" id="wizard">
+    <div id="stepContainer"></div>
+  </section>
+
+</div>
+
+<div class="step-nav hidden" id="stepNav">
+  <div class="step-nav-inner">
+    <button class="btn btn-ghost" id="backBtn">Atrás</button>
+    <button class="btn btn-primary" id="nextBtn">Continuar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ STATE ============ */
+const state = {
+  personal:{ nombre:'', puesto:'', email:'', telefono:'', ciudad:'', linkedin:'', resumen:'' },
+  hasExperience:null,
+  experiences:[],
+  education:[],
+  skills:[],
+  languages:[],
+  photo:{ enabled:false, dataUrl:null },
+  template:null,
+  color:'#2C4E39'
+};
+
+const COLOR_PRESETS = ['#2C4E39','#1D3557','#7C2D12','#3D3D3D','#5B4636','#0B4F6C'];
+
+const STEPS = ['personal','experience','education','skills','photo','template','customize'];
+let stepIndex = 0;
+
+const heroSection = document.getElementById('heroSection');
+const wizard = document.getElementById('wizard');
+const stepContainer = document.getElementById('stepContainer');
+const stepNav = document.getElementById('stepNav');
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+
+function uid(){ return 'id'+Math.random().toString(36).slice(2,9); }
+function esc(str){
+  return (str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function nl2br(str){ return esc(str).replace(/\n/g,'<br>'); }
+function fmtMonth(v){
+  if(!v) return '';
+  const [y,m] = v.split('-');
+  const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return meses[parseInt(m,10)-1] + ' ' + y;
+}
+
+/* ============ NAV ============ */
+document.getElementById('startBtn').addEventListener('click', () => {
+  heroSection.style.display='none';
+  wizard.classList.add('show');
+  stepNav.classList.remove('hidden');
+  progressWrap.classList.add('show');
+  renderStep();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+backBtn.addEventListener('click', () => {
+  if(stepIndex===0){
+    wizard.classList.remove('show');
+    stepNav.classList.add('hidden');
+    progressWrap.classList.remove('show');
+    heroSection.style.display='';
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  stepIndex--;
+  renderStep();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+nextBtn.addEventListener('click', () => {
+  if(!validateStep()) return;
+  const currentStep = STEPS[stepIndex];
+  if(currentStep === 'customize'){
+    showFinalScreen();
+    return;
+  }
+  if(stepIndex < STEPS.length - 1){
+    stepIndex++;
+    renderStep();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+});
+
+function updateProgress(){
+  const pct = ((stepIndex+1)/STEPS.length)*100;
+  progressFill.style.width = pct+'%';
+  progressLabel.textContent = `Paso ${stepIndex+1} de ${STEPS.length}`;
+}
+
+function renderStep(){
+  updateProgress();
+  const step = STEPS[stepIndex];
+  stepContainer.innerHTML = RENDERERS[step]();
+  attachStepEvents(step);
+  nextBtn.textContent = step==='customize' ? 'Ver currículum final' : 'Continuar';
+  backBtn.textContent = stepIndex===0 ? 'Volver al inicio' : 'Atrás';
+}
+
+/* ============ VALIDATION ============ */
+function validateStep(){
+  const step = STEPS[stepIndex];
+  if(step==='personal'){
+    const nombre = document.getElementById('f_nombre').value.trim();
+    const email = document.getElementById('f_email').value.trim();
+    if(!nombre){ flagInvalid('f_nombre','Cuéntanos tu nombre para continuar.'); return false; }
+    if(!email){ flagInvalid('f_email','Necesitamos un correo de contacto.'); return false; }
+    return true;
+  }
+  if(step==='experience'){
+    if(state.hasExperience===null){ alert('Elige una opción para continuar.'); return false; }
+    return true;
+  }
+  return true;
+}
+function flagInvalid(id,msg){
+  const el = document.getElementById(id);
+  el.style.borderColor = 'var(--danger)';
+  el.focus();
+  el.addEventListener('input', ()=>{ el.style.borderColor=''; }, {once:true});
+}
+
+/* ============ STEP RENDERERS ============ */
+const RENDERERS = {
+
+personal(){
+  const p = state.personal;
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Datos de contacto</p>
+      <h2>Empecemos por ti</h2>
+      <p>Esta información aparece en la cabecera de tu currículum.</p>
+    </div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="f_nombre" placeholder="Ej. Ana García López" value="${esc(p.nombre)}"></div>
+    <div class="field"><label>Puesto al que aspiras <span class="hint">(opcional)</span></label><input type="text" id="f_puesto" placeholder="Ej. Diseñadora UX / Contable Junior" value="${esc(p.puesto)}"></div>
+    <div class="grid-2">
+      <div class="field"><label>Correo electrónico</label><input type="email" id="f_email" placeholder="tu@correo.com" value="${esc(p.email)}"></div>
+      <div class="field"><label>Teléfono <span class="hint">(opcional)</span></label><input type="tel" id="f_telefono" placeholder="+34 600 000 000" value="${esc(p.telefono)}"></div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Ciudad <span class="hint">(opcional)</span></label><input type="text" id="f_ciudad" placeholder="Ciudad, País" value="${esc(p.ciudad)}"></div>
+      <div class="field"><label>LinkedIn o portafolio <span class="hint">(opcional)</span></label><input type="text" id="f_linkedin" placeholder="linkedin.com/in/tu-nombre" value="${esc(p.linkedin)}"></div>
+    </div>
+    <div class="field"><label>Perfil breve <span class="hint">(opcional, 2-3 líneas)</span></label><textarea id="f_resumen" placeholder="Una frase que resuma quién eres profesionalmente...">${esc(p.resumen)}</textarea></div>
+  </div>`;
+},
+
+experience(){
+  const has = state.hasExperience;
+  const listHtml = state.experiences.map((e,i)=>`
+    <div class="entry-card" data-i="${i}">
+      <div class="entry-top">
+        <span class="entry-title">Experiencia ${i+1}</span>
+        <button class="icon-btn" data-remove-exp="${i}" title="Eliminar" aria-label="Eliminar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="field"><label>Puesto</label><input type="text" data-exp="${i}" data-field="puesto" value="${esc(e.puesto)}" placeholder="Ej. Auxiliar administrativo"></div>
+      <div class="field"><label>Empresa</label><input type="text" data-exp="${i}" data-field="empresa" value="${esc(e.empresa)}" placeholder="Ej. Comercial del Norte S.L."></div>
+      <div class="grid-2">
+        <div class="field"><label>Inicio</label><input type="month" data-exp="${i}" data-field="inicio" value="${esc(e.inicio)}"></div>
+        <div class="field"><label>Fin</label><input type="month" data-exp="${i}" data-field="fin" value="${esc(e.fin)}" ${e.actual?'disabled':''}></div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="actual_${i}" data-exp="${i}" data-field="actual" ${e.actual?'checked':''}>
+        <label for="actual_${i}">Trabajo aquí actualmente</label>
+      </div>
+      <div class="field"><label>Funciones y logros <span class="hint">(breve)</span></label><textarea data-exp="${i}" data-field="descripcion" placeholder="Ej. Gestión de pedidos, atención al cliente y control de inventario.">${esc(e.descripcion)}</textarea></div>
+    </div>`).join('');
+
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Trayectoria</p>
+      <h2>¿Tienes experiencia laboral?</h2>
+      <p>Con esto elegimos qué plantilla te conviene más.</p>
+    </div>
+    <div class="choice-row">
+      <button class="choice-card ${has===true?'active':''}" data-exp-choice="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v11a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" stroke="currentColor" stroke-width="1.6"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.6"/></svg>
+        <strong>Sí, tengo experiencia</strong>
+        <span>He trabajado antes en uno o varios empleos.</span>
+      </button>
+      <button class="choice-card ${has===false?'active':''}" data-exp-choice="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4-8 4-8-4 8-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 11v5c0 1.5 3.5 3 8 3s8-1.5 8-3v-5" stroke="currentColor" stroke-width="1.6"/></svg>
+        <strong>Aún no / soy recién egresado</strong>
+        <span>Prefiero destacar estudios, prácticas o habilidades.</span>
+      </button>
+    </div>
+    <div id="expListWrap" style="${has===true?'':'display:none;margin-top:18px;' }">
+      ${has===true ? `<div style="margin-top:18px;">${listHtml}<button class="add-link" id="addExpBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Añadir experiencia</button></div>` : ''}
+    </div>
+  </div>`;
+},
+
+education(){
+  const listHtml = state.education.map((e,i)=>`
+    <div class="entry-card" data-i="${i}">
+      <div class="entry-top">
+        <span class="entry-title">Formación ${i+1}</span>
+        <button class="icon-btn" data-remove-edu="${i}" title="Eliminar" aria-label="Eliminar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="field"><label>Título o estudio</label><input type="text" data-edu="${i}" data-field="titulo" value="${esc(e.titulo)}" placeholder="Ej. Bachillerato / Grado en Administración"></div>
+      <div class="field"><label>Centro educativo</label><input type="text" data-edu="${i}" data-field="institucion" value="${esc(e.institucion)}" placeholder="Ej. IES Miguel de Cervantes"></div>
+      <div class="grid-2">
+        <div class="field"><label>Inicio</label><input type="month" data-edu="${i}" data-field="inicio" value="${esc(e.inicio)}"></div>
+        <div class="field"><label>Fin <span class="hint">(o prevista)</span></label><input type="month" data-edu="${i}" data-field="fin" value="${esc(e.fin)}"></div>
+      </div>
+    </div>`).join('');
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Formación</p>
+      <h2>Tu educación</h2>
+      <p>Añade tus estudios, del más reciente al más antiguo.</p>
+    </div>
+    ${listHtml}
+    <button class="add-link" id="addEduBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Añadir formación</button>
+  </div>`;
+},
+
+skills(){
+  const chips = state.skills.map((s,i)=>`<span class="chip">${esc(s)}<button data-remove-skill="${i}" aria-label="Quitar">&times;</button></span>`).join('');
+  const langs = state.languages.map((l,i)=>`
+    <div class="entry-card" data-i="${i}">
+      <div class="entry-top">
+        <span class="entry-title">Idioma ${i+1}</span>
+        <button class="icon-btn" data-remove-lang="${i}" aria-label="Eliminar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Idioma</label><input type="text" data-lang="${i}" data-field="idioma" value="${esc(l.idioma)}" placeholder="Ej. Inglés"></div>
+        <div class="field"><label>Nivel</label>
+          <select data-lang="${i}" data-field="nivel">
+            <option value="">Elige...</option>
+            <option value="Básico" ${l.nivel==='Básico'?'selected':''}>Básico</option>
+            <option value="Intermedio" ${l.nivel==='Intermedio'?'selected':''}>Intermedio</option>
+            <option value="Avanzado" ${l.nivel==='Avanzado'?'selected':''}>Avanzado</option>
+            <option value="Nativo" ${l.nivel==='Nativo'?'selected':''}>Nativo</option>
+          </select>
+        </div>
+      </div>
+    </div>`).join('');
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Fortalezas</p>
+      <h2>Habilidades e idiomas</h2>
+      <p>Añade palabras clave relevantes para el puesto que buscas.</p>
+    </div>
+    <div class="field">
+      <label>Habilidades</label>
+      <div class="skills-input-row">
+        <input type="text" id="skillInput" placeholder="Ej. Excel, atención al cliente...">
+        <button class="btn btn-ghost btn-sm" id="addSkillBtn" type="button">Añadir</button>
+      </div>
+      <div class="chip-wrap" id="chipWrap">${chips}</div>
+    </div>
+    <div class="field" style="margin-top:22px;">
+      <label>Idiomas <span class="hint">(opcional)</span></label>
+      <div id="langListWrap">${langs}</div>
+      <button class="add-link" id="addLangBtn" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Añadir idioma</button>
+    </div>
+  </div>`;
+},
+
+photo(){
+  const ph = state.photo;
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Presentación</p>
+      <h2>¿Incluir una foto?</h2>
+      <p>Es opcional. Algunos sectores y países prefieren currículums sin foto — tú decides.</p>
+    </div>
+    <div class="photo-toggle">
+      <div class="toggle-pill ${!ph.enabled?'active':''}" data-photo-choice="false">Sin foto</div>
+      <div class="toggle-pill ${ph.enabled?'active':''}" data-photo-choice="true">Con foto</div>
+    </div>
+    <div id="photoUploadWrap" style="${ph.enabled?'':'display:none;'}">
+      <label class="photo-upload" for="photoInput">
+        ${ph.dataUrl ? `<img src="${ph.dataUrl}" class="photo-preview" alt="Vista previa">` : ''}
+        <div class="photo-upload-label"><strong>${ph.dataUrl?'Cambiar foto':'Subir foto'}</strong><br>JPG o PNG, fondo neutro recomendado</div>
+        <input type="file" id="photoInput" accept="image/*">
+      </label>
+    </div>
+  </div>`;
+},
+
+template(){
+  const recommended = state.hasExperience===false ? 'moderno' : 'ejecutivo';
+  const chosen = state.template || recommended;
+  if(!state.template) state.template = recommended;
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Diseño</p>
+      <h2>Elige tu plantilla</h2>
+      <p>Marcamos la que mejor suele funcionar según tu situación, pero la decisión es tuya.</p>
+    </div>
+    <div class="template-select-grid">
+      <div class="template-option ${chosen==='ejecutivo'?'active':''}" data-tpl="ejecutivo">
+        ${recommended==='ejecutivo'?'<span class="recommend-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.6 6.8L12 17l-6.2 3.5 1.6-6.8L2.2 9l6.9-.7L12 2z" fill="currentColor"/></svg>Recomendada</span>':''}
+        <div class="thumb-frame"><div id="thumbA"></div></div>
+        <h3>Ejecutivo</h3>
+        <p>Cronología clara en una columna. Formato clásico, ideal si tienes experiencia laboral que ordenar.</p>
+      </div>
+      <div class="template-option ${chosen==='moderno'?'active':''}" data-tpl="moderno">
+        ${recommended==='moderno'?'<span class="recommend-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.6 6.8L12 17l-6.2 3.5 1.6-6.8L2.2 9l6.9-.7L12 2z" fill="currentColor"/></svg>Recomendada</span>':''}
+        <div class="thumb-frame"><div id="thumbB"></div></div>
+        <h3>Moderno</h3>
+        <p>Barra lateral con foco en habilidades y formación. Ideal para primeros empleos o perfiles visuales.</p>
+      </div>
+    </div>
+  </div>`;
+},
+
+customize(){
+  return `
+  <div class="step-card">
+    <div class="step-head">
+      <p class="step-kicker">Últimos ajustes</p>
+      <h2>Personaliza el color</h2>
+      <p>Puedes cambiarlo cuantas veces quieras antes de descargar.</p>
+    </div>
+    <div class="swatch-row" id="swatchRow">
+      ${COLOR_PRESETS.map(c=>`<div class="swatch ${state.color===c?'active':''}" style="background:${c}" data-color="${c}"></div>`).join('')}
+      <div class="swatch-custom" title="Color personalizado">
+        <input type="color" id="customColor" value="${state.color}">
+      </div>
+    </div>
+    <div class="preview-shell">
+      <div class="preview-scale-wrap">
+        <div id="livePreview"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+};
+
+/* ============ STEP EVENTS ============ */
+function attachStepEvents(step){
+  if(step==='personal'){
+    const ids = {f_nombre:'nombre',f_puesto:'puesto',f_email:'email',f_telefono:'telefono',f_ciudad:'ciudad',f_linkedin:'linkedin',f_resumen:'resumen'};
+    Object.keys(ids).forEach(id=>{
+      document.getElementById(id).addEventListener('input', e=>{ state.personal[ids[id]] = e.target.value; });
+    });
+  }
+
+  if(step==='experience'){
+    document.querySelectorAll('[data-exp-choice]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.hasExperience = btn.getAttribute('data-exp-choice')==='true';
+        if(state.hasExperience && state.experiences.length===0){
+          state.experiences.push(blankExp());
+        }
+        renderStep();
+      });
+    });
+    document.getElementById('addExpBtn')?.addEventListener('click', ()=>{
+      state.experiences.push(blankExp());
+      renderStep();
+    });
+    document.querySelectorAll('[data-remove-exp]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.experiences.splice(parseInt(btn.getAttribute('data-remove-exp')),1);
+        renderStep();
+      });
+    });
+    document.querySelectorAll('[data-exp]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        const i = parseInt(inp.getAttribute('data-exp'));
+        const f = inp.getAttribute('data-field');
+        if(f==='actual'){
+          state.experiences[i].actual = inp.checked;
+          renderStep();
+        } else {
+          state.experiences[i][f] = inp.value;
+        }
+      });
+      if(inp.type==='checkbox'){
+        inp.addEventListener('change', ()=>{
+          const i = parseInt(inp.getAttribute('data-exp'));
+          state.experiences[i].actual = inp.checked;
+          renderStep();
+        });
+      }
+    });
+  }
+
+  if(step==='education'){
+    document.getElementById('addEduBtn').addEventListener('click', ()=>{
+      state.education.push({titulo:'',institucion:'',inicio:'',fin:''});
+      renderStep();
+    });
+    document.querySelectorAll('[data-remove-edu]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.education.splice(parseInt(btn.getAttribute('data-remove-edu')),1);
+        renderStep();
+      });
+    });
+    document.querySelectorAll('[data-edu]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        const i = parseInt(inp.getAttribute('data-edu'));
+        const f = inp.getAttribute('data-field');
+        state.education[i][f] = inp.value;
+      });
+    });
+  }
+
+  if(step==='skills'){
+    const addSkill = ()=>{
+      const inp = document.getElementById('skillInput');
+      const v = inp.value.trim();
+      if(v){ state.skills.push(v); inp.value=''; renderStep(); document.getElementById('skillInput').focus(); }
+    };
+    document.getElementById('addSkillBtn').addEventListener('click', addSkill);
+    document.getElementById('skillInput').addEventListener('keydown', e=>{
+      if(e.key==='Enter'){ e.preventDefault(); addSkill(); }
+    });
+    document.querySelectorAll('[data-remove-skill]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.skills.splice(parseInt(btn.getAttribute('data-remove-skill')),1);
+        renderStep();
+      });
+    });
+    document.getElementById('addLangBtn').addEventListener('click', ()=>{
+      state.languages.push({idioma:'',nivel:''});
+      renderStep();
+    });
+    document.querySelectorAll('[data-remove-lang]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.languages.splice(parseInt(btn.getAttribute('data-remove-lang')),1);
+        renderStep();
+      });
+    });
+    document.querySelectorAll('[data-lang]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        const i = parseInt(inp.getAttribute('data-lang'));
+        const f = inp.getAttribute('data-field');
+        state.languages[i][f] = inp.value;
+      });
+      inp.addEventListener('change', ()=>{
+        const i = parseInt(inp.getAttribute('data-lang'));
+        const f = inp.getAttribute('data-field');
+        state.languages[i][f] = inp.value;
+      });
+    });
+  }
+
+  if(step==='photo'){
+    document.querySelectorAll('[data-photo-choice]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.photo.enabled = btn.getAttribute('data-photo-choice')==='true';
+        renderStep();
+      });
+    });
+    const input = document.getElementById('photoInput');
+    input?.addEventListener('change', e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{ state.photo.dataUrl = reader.result; renderStep(); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if(step==='template'){
+    document.getElementById('thumbA').innerHTML = buildResumeHTML('ejecutivo', true);
+    document.getElementById('thumbB').innerHTML = buildResumeHTML('moderno', true);
+    scaleThumb('thumbA'); scaleThumb('thumbB');
+    document.querySelectorAll('[data-tpl]').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        state.template = card.getAttribute('data-tpl');
+        renderStep();
+      });
+    });
+  }
+
+  if(step==='customize'){
+    renderLivePreview();
+    document.querySelectorAll('[data-color]').forEach(sw=>{
+      sw.addEventListener('click', ()=>{
+        state.color = sw.getAttribute('data-color');
+        renderStep();
+      });
+    });
+    document.getElementById('customColor').addEventListener('input', e=>{
+      state.color = e.target.value;
+      document.getElementById('livePreview').style.setProperty('--resume-accent-live', state.color);
+      renderLivePreview();
+    });
+  }
+}
+
+function blankExp(){ return {puesto:'',empresa:'',inicio:'',fin:'',actual:false,descripcion:''}; }
+
+function scaleThumb(id){
+  const frame = document.getElementById(id).parentElement;
+  const page = document.getElementById(id).querySelector('.resume-page');
+  if(!page) return;
+  const scale = frame.clientWidth / 794;
+  page.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', ()=>{
+  if(STEPS[stepIndex]==='template'){ scaleThumb('thumbA'); scaleThumb('thumbB'); }
+});
+
+function renderLivePreview(){
+  document.getElementById('livePreview').innerHTML = buildResumeHTML(state.template, false);
+}
+
+/* ============ RESUME BUILDER ============ */
+function buildResumeHTML(tpl, isThumb){
+  const p = state.personal;
+  const accent = state.color;
+  const photoImg = (state.photo.enabled && state.photo.dataUrl) ? state.photo.dataUrl : null;
+
+  const expItems = state.experiences.filter(e=>e.puesto||e.empresa).map(e=>`
+    <div class="item">
+      <div class="item-top"><strong>${esc(e.puesto)||'Puesto'}</strong><span class="date">${fmtMonth(e.inicio)} — ${e.actual?'Actualidad':fmtMonth(e.fin)}</span></div>
+      <div class="item-sub">${esc(e.empresa)}</div>
+      ${e.descripcion?`<div class="item-desc">${nl2br(e.descripcion)}</div>`:''}
+    </div>`).join('') || '<p class="empty-msg">Añade tu experiencia laboral.</p>';
+
+  const eduItems = state.education.filter(e=>e.titulo||e.institucion).map(e=>`
+    <div class="item">
+      <div class="item-top"><strong>${esc(e.titulo)||'Título'}</strong><span class="date">${fmtMonth(e.inicio)} — ${fmtMonth(e.fin)||'Actualidad'}</span></div>
+      <div class="item-sub">${esc(e.institucion)}</div>
+    </div>`).join('') || '<p class="empty-msg">Añade tu formación académica.</p>';
+
+  const contactBits = [
+    p.email ? p.email : '',
+    p.telefono ? p.telefono : '',
+    p.ciudad ? p.ciudad : '',
+    p.linkedin ? p.linkedin : ''
+  ].filter(Boolean);
+
+  if(tpl==='moderno'){
+    const skillTags = state.skills.map(s=>`<span class="skill-tag">${esc(s)}</span>`).join('');
+    const langItems = state.languages.filter(l=>l.idioma).map(l=>`<div class="lang-item"><span>${esc(l.idioma)}</span><span>${esc(l.nivel)}</span></div>`).join('');
+    return `
+    <div class="resume-page ${isThumb?'':'responsive-scale'}" style="--resume-accent:${accent}">
+      <div class="tpl-moderno">
+        <div class="side">
+          ${photoImg?`<img src="${photoImg}" alt="">`:''}
+          <h1>${esc(p.nombre)||'Tu nombre'}</h1>
+          ${p.puesto?`<div class="role">${esc(p.puesto)}</div>`:''}
+          <h3 class="sec">Contacto</h3>
+          ${contactBits.map(c=>`<div class="contact-item">${esc(c)}</div>`).join('') || '<div class="contact-item" style="opacity:.6">Añade tus datos de contacto</div>'}
+          ${state.skills.length?`<h3 class="sec">Habilidades</h3><div>${skillTags}</div>`:''}
+          ${state.languages.length?`<h3 class="sec">Idiomas</h3>${langItems}`:''}
+          <h3 class="sec">Formación</h3>
+          ${state.education.filter(e=>e.titulo).map(e=>`<div class="contact-item"><strong>${esc(e.titulo)}</strong><br>${esc(e.institucion)}</div>`).join('') || '<div class="contact-item" style="opacity:.6">Añade tu formación</div>'}
+        </div>
+        <div class="main">
+          ${p.resumen?`<div class="summary">${nl2br(p.resumen)}</div>`:''}
+          <section><h2 class="sec">Experiencia</h2>${expItems}</section>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // ejecutivo
+  const skillPills = state.skills.map(s=>`<span class="skill-pill">${esc(s)}</span>`).join('');
+  const langRows = state.languages.filter(l=>l.idioma).map(l=>`<div class="lang-row"><span>${esc(l.idioma)}</span><b>${esc(l.nivel)}</b></div>`).join('');
+  return `
+  <div class="resume-page ${isThumb?'':'responsive-scale'}" style="--resume-accent:${accent}">
+    <div class="tpl-ejecutivo">
+      <div class="head">
+        ${photoImg?`<img src="${photoImg}" alt="">`:''}
+        <div class="head-text">
+          <h1>${esc(p.nombre)||'Tu nombre'}</h1>
+          ${p.puesto?`<div class="role">${esc(p.puesto)}</div>`:''}
+          <div class="contact-line">${contactBits.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+        </div>
+      </div>
+      ${p.resumen?`<section><h2 class="sec">Perfil</h2><div class="summary">${nl2br(p.resumen)}</div></section>`:''}
+      <section><h2 class="sec">Experiencia</h2>${expItems}</section>
+      <section><h2 class="sec">Formación</h2>${eduItems}</section>
+      ${state.skills.length?`<section><h2 class="sec">Habilidades</h2><div class="skills-flex">${skillPills}</div></section>`:''}
+      ${state.languages.length?`<section><h2 class="sec">Idiomas</h2>${langRows}</section>`:''}
+    </div>
+  </div>`;
+}
+
+/* ============ FINAL RESULT PAGE ============ */
+function showFinalScreen(){
+  stepNav.classList.add('hidden');
+  progressWrap.classList.remove('show');
+  stepContainer.innerHTML = `
+    <div class="step-card">
+      <div class="step-head">
+        <p class="step-kicker">Listo</p>
+        <h2>Tu currículum está terminado</h2>
+        <p>Descárgalo en PDF o vuelve atrás para seguir ajustándolo.</p>
+      </div>
+      <div class="customize-panel">
+        <div class="customize-row">
+          <div class="customize-label">Plantilla</div>
+          <div class="mini-toggle">
+            <button data-final-tpl="ejecutivo" class="${state.template==='ejecutivo'?'active':''}">Ejecutivo</button>
+            <button data-final-tpl="moderno" class="${state.template==='moderno'?'active':''}">Moderno</button>
+          </div>
+        </div>
+        <div class="customize-row">
+          <div class="customize-label">Foto</div>
+          <div class="mini-toggle">
+            <button data-final-photo="false" class="${!state.photo.enabled?'active':''}">Sin foto</button>
+            <button data-final-photo="true" class="${state.photo.enabled?'active':''}" ${!state.photo.dataUrl?'disabled title="Sube una foto en el paso anterior"':''}>Con foto</button>
+          </div>
+        </div>
+        <div class="customize-row">
+          <div class="customize-label">Color</div>
+          <div class="swatch-row" style="margin:0;" id="finalSwatchRow">
+            ${COLOR_PRESETS.map(c=>`<div class="swatch ${state.color===c?'active':''}" style="background:${c}" data-final-color="${c}"></div>`).join('')}
+            <div class="swatch-custom"><input type="color" id="finalCustomColor" value="${state.color}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="preview-shell">
+        <div class="preview-scale-wrap">
+          <div id="printArea">${buildResumeHTML(state.template, false)}</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-ghost" id="editBackBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Seguir editando
+        </button>
+        <button class="btn btn-primary" id="downloadBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Descargar en PDF
+        </button>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('[data-final-tpl]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ state.template = btn.getAttribute('data-final-tpl'); showFinalScreen(); });
+  });
+  document.querySelectorAll('[data-final-photo]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.disabled) return;
+      state.photo.enabled = btn.getAttribute('data-final-photo')==='true';
+      showFinalScreen();
+    });
+  });
+  document.querySelectorAll('[data-final-color]').forEach(sw=>{
+    sw.addEventListener('click', ()=>{ state.color = sw.getAttribute('data-final-color'); showFinalScreen(); });
+  });
+  document.getElementById('finalCustomColor').addEventListener('input', e=>{
+    state.color = e.target.value;
+    document.getElementById('printArea').innerHTML = buildResumeHTML(state.template, false);
+  });
+  document.getElementById('editBackBtn').addEventListener('click', ()=>{
+    stepNav.classList.remove('hidden');
+    progressWrap.classList.add('show');
+    stepIndex = STEPS.length - 1;
+    renderStep();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    window.print();
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+})();
+</script>
+</body>
+</html>
