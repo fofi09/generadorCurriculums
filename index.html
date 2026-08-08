@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Hoja en Blanco — Crea tu currículum</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -1069,6 +1070,10 @@ function showFinalScreen(){
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Seguir editando
         </button>
+        <button class="btn btn-ghost" id="printBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Imprimir
+        </button>
         <button class="btn btn-primary" id="downloadBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Descargar en PDF
@@ -1100,8 +1105,46 @@ function showFinalScreen(){
     renderStep();
     window.scrollTo({top:0,behavior:'smooth'});
   });
-  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  
+  document.getElementById('printBtn').addEventListener('click', ()=>{
     window.print();
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    const originalElement = document.getElementById('printArea').querySelector('.resume-page');
+    
+    const btn = document.getElementById('downloadBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Descargando...';
+    btn.disabled = true;
+
+    const opt = {
+      margin:       0,
+      filename:     'Mi_Curriculum.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { 
+        scale: 2, 
+        useCORS: true,
+        // Usamos onclone para modificar la vista ANTES de generar el PDF, sin romper la web visualmente
+        onclone: function(clonedDoc) {
+          const el = clonedDoc.querySelector('#printArea .resume-page');
+          if (el) {
+            el.classList.remove('responsive-scale');
+            el.style.transform = 'none';
+            el.style.margin = '0';
+          }
+        }
+      },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opt).from(originalElement).save().then(()=>{
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }).catch(()=>{
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    });
   });
   window.scrollTo({top:0,behavior:'smooth'});
 }
