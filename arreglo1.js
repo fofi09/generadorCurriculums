@@ -346,7 +346,7 @@ skills(){
       <p>Añade palabras clave relevantes para el puesto que buscas.</p>
     </div>
     <div class="field">
-      <label>Habilidades <span class="hint">(mínimo 3)</span></label>
+      <label>Habilidades <span class="hint">(Minimo 3, los debes escribir de a uno e ir apretando el botón añadir)</span></label>
       <div class="skills-input-row">
         <input type="text" id="skillInput" placeholder="Ej. Excel, atención al cliente...">
         <button class="btn btn-ghost btn-sm" id="addSkillBtn" type="button">Añadir</button>
