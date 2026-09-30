@@ -224,15 +224,15 @@ personal(){
       <h2>Empecemos por ti</h2>
       <p>Esta información aparece en la cabecera de tu currículum.</p>
     </div>
-    <div class="field"><label>Nombre completo</label><input type="text" id="f_nombre" placeholder="Ej. Ana García López" value="${esc(p.nombre)}"></div>
-    <div class="field"><label>Puesto al que aspiras</label><input type="text" id="f_puesto" placeholder="Ej. Diseñadora UX / Contable Junior" value="${esc(p.puesto)}"></div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="f_nombre" placeholder="Ej. Ana Sofia Aguirre" value="${esc(p.nombre)}"></div>
+    <div class="field"><label>Puesto al que aspiras</label><input type="text" id="f_puesto" placeholder="Ej. Programadora / Contable Junior" value="${esc(p.puesto)}"></div>
     <div class="grid-2">
-      <div class="field"><label>Correo electrónico</label><input type="email" id="f_email" placeholder="tu@correo.com" value="${esc(p.email)}"></div>
-      <div class="field"><label>Teléfono <span class="hint">(opcional)</span></label><input type="tel" id="f_telefono" placeholder="+34 600 000 000" value="${esc(p.telefono)}" oninput="this.value = this.value.replace(/[^0-9+ -]/g, '')"></div>
+      <div class="field"><label>Correo electrónico</label><input type="email" id="f_email" placeholder="sofiaguirree18@gmail.com" value="${esc(p.email)}"></div>
+      <div class="field"><label>Teléfono <span class="hint">(opcional)</span></label><input type="tel" id="f_telefono" placeholder="381 333 2255" value="${esc(p.telefono)}" oninput="this.value = this.value.replace(/[^0-9+ -]/g, '')"></div>
     </div>
     <div class="grid-2">
       <div class="field"><label>Ciudad</label><input type="text" id="f_ciudad" placeholder="Ciudad, País" value="${esc(p.ciudad)}"></div>
-      <div class="field"><label>LinkedIn o portafolio <span class="hint">(opcional)</span></label><input type="text" id="f_linkedin" placeholder="linkedin.com/in/tu-nombre" value="${esc(p.linkedin)}"></div>
+      <div class="field"><label>LinkedIn o portafolio <span class="hint">(opcional)</span></label><input type="text" id="f_linkedin" placeholder="linkedin.com" value="${esc(p.linkedin)}"></div>
     </div>
     <div class="field"><label>Descripción de tu perfil profesional <span class="hint">(mínimo 20 palabras)</span></label><textarea id="f_resumen" placeholder="Describe brevemente tu experiencia, habilidades y objetivos profesionales...">${esc(p.resumen)}</textarea></div>
   </div>`;
